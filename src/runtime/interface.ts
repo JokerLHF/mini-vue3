@@ -1,5 +1,5 @@
 export interface RendererElement {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export const Text = Symbol('Text');
@@ -29,11 +29,12 @@ export type VNodeChildren =
 export type VNodeProps = { [key: string]: any};
 
 export interface VNode {
-  type: VNodeTypes,
-  props: VNodeProps,
-  children: VNodeChildren,
+  type: VNodeTypes;
+  props: VNodeProps;
+  children: VNodeChildren;
   shapeFlag: number;
-  el: RendererElement | null,
+  el: RendererElement | null;
+  anchor: RendererElement | null; // Fragment 专有
 }
 
 // << 表示向左移动指定位数，左边超出的位数将会被清除，右边将会补零。

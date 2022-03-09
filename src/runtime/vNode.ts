@@ -44,10 +44,11 @@ export function h(type: any, props: any, children: any): VNode {
 
 const createVNode = (type: any, props: any, children: any): VNode => {
   const vNode = {
-    el: null,
     type,
     props,
     children,
+    el: null,
+    anchor: null,
     shapeFlag: getShapeFlags(type),
   }
   // 根据 children 的类型处理 shapeFlag

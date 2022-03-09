@@ -1,6 +1,6 @@
-import { VNode } from "../interface";
+import { RendererElement, VNode } from "../interface";
 
-export const processComponent = (oldVNode: VNode | null, newVNode: VNode, container: any) => {
+export const processComponent = (oldVNode: VNode | null, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
 
 }
 

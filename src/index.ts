@@ -14,7 +14,7 @@ render(
     h(Fragment, {}, []),
     h('li', {}, 'last'),
   ]),
-  document.body
+  document.body,
 );
 
 setTimeout(() => {
@@ -24,7 +24,7 @@ setTimeout(() => {
       h(Fragment, {}, [h('li', {}, 'middle')]),
       h('li', {}, 'last'),
     ]),
-    document.body
+    document.body,
   );
 }, 5000);
 
