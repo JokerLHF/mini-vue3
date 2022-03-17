@@ -87,7 +87,7 @@ const unMountChildren = (children: VNode[]) => {
  * 但是 newVNode 还没有挂载到 dom 树上，所以其 children 应该是 VNodeChildAtom[]
  * 且 oldVNode.children 和 newVNode.children 都只可能是数组
  */
-// export const patchArrayChildren = (oldVNode: VNode, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
+// export const patchUnkeyedChildren = (oldVNode: VNode, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
 //   const oldChildrenLen = oldVNode.children.length;
 //   const newChildrenLen = newVNode.children.length;
 //   const len = Math.min(oldChildrenLen, newChildrenLen);

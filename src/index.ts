@@ -7,11 +7,32 @@
 // computedRun();
 
 import { h, Text, render, Fragment } from './runtime';
+// props 的
+// render(
+//   h('div', {}, [
+
+//     h('div', {
+//       class: 'a b',
+//       style: {
+//         color: 'red',
+//         fontSize: '14px',
+//       },
+//       onClick: () => console.log('click'),
+//       custom: true
+//     }, 'first'),
+
+//     h('input', {
+//       checked: '',
+//     }, 'second'),
+//   ]),
+//   document.body,
+// );
 
 // render(
 //   h('ul', {}, [
 //     h('li', {}, 'first'),
-//     h(Fragment, {}, []),
+//     h('li', {}, 'second'),
+//     h('li', {}, 'third'),
 //     h('li', {}, 'last'),
 //   ]),
 //   document.body,
@@ -21,8 +42,9 @@ import { h, Text, render, Fragment } from './runtime';
 //   render(
 //     h('ul', {}, [
 //       h('li', {}, 'first'),
-//       h(Fragment, {}, [h('li', {}, 'middle')]),
+//       h('li', {}, 'second'),
 //       h('li', {}, 'last'),
+//       h('li', {}, 'newLAst'),
 //     ]),
 //     document.body,
 //   );

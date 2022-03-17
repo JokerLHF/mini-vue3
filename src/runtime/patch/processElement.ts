@@ -1,4 +1,5 @@
 import { RendererElement, ShapeFlags, VNode, VNodeChildAtom } from "../interface";
+import { patchProps } from "./patchProps";
 import { mountChildren, patchChildren } from "./processChildren";
 
 export const processElement = (oldVNode: VNode | null, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
@@ -12,12 +13,16 @@ export const processElement = (oldVNode: VNode | null, newVNode: VNode, containe
 }
 
 const mountElement = (newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
-  const { type, shapeFlag, children } = newVNode;
+  const { type, shapeFlag, children, props } = newVNode;
   const element = document.createElement(type as string);
   if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {    
     element.textContent = children as string;
   } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
     mountChildren(children as VNodeChildAtom[], element, anchor);
+  }
+
+  if (props) {
+    patchProps(element, {}, props);
   }
 
   newVNode.el = element;
@@ -27,6 +32,7 @@ const mountElement = (newVNode: VNode, container: RendererElement, anchor: Rende
 
 const patchElement = (oldVNode: VNode, newVNode: VNode, anchor: RendererElement | null) => {
   newVNode.el = oldVNode.el!;
+  patchProps(newVNode.el, oldVNode.props, newVNode.props);
   patchChildren(oldVNode, newVNode, newVNode.el, anchor);
 }
 
