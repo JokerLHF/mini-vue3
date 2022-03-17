@@ -1,5 +1,5 @@
 import { isBoolean, isNull, isNumber, isString, isUndefined } from "../utils";
-import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, VNodeArrayChildren, RawChildren, VNodeChildAtom } from "./interface";
+import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren, VNodeChildAtom } from "./interface";
 
 /**
  *  h(Symbol(Text), {}, 111)
@@ -25,7 +25,7 @@ import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, VNodeArrayCh
 export function h(
   type: string,
   props: VNodeProps,
-  children: VNodeArrayChildren | RawChildren
+  children: VNodeChildAtom[] | RawChildren
 ): VNode
 
 /**
@@ -34,7 +34,7 @@ export function h(
  export function h(
   type: typeof Fragment,
   props: VNodeProps,
-  children: VNodeArrayChildren
+  children: VNodeChildAtom[]
 ): VNode
 
 
@@ -49,6 +49,7 @@ const createVNode = (type: any, props: any, children: any): VNode => {
     children,
     el: null,
     anchor: null,
+    key: props.key,
     shapeFlag: getShapeFlags(type),
   }
   // 根据 children 的类型处理 shapeFlag

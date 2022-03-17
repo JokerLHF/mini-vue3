@@ -20,20 +20,21 @@ export type VNodeChildAtom =
   | RawChildren
   | VNode
 
-export type VNodeArrayChildren = VNodeChildAtom[];
 
 export type VNodeChildren = 
   | string
-  | VNodeArrayChildren;
+  | VNodeChildAtom[];
 
-export type VNodeProps = { [key: string]: any};
+export type VNodeProps = { [key: string]: any };
 
+export type VNodeKey = string | number | null;
 export interface VNode {
   type: VNodeTypes;
   props: VNodeProps;
   children: VNodeChildren;
   shapeFlag: number;
   el: RendererElement | null;
+  key: VNodeKey; // 用于 diff 算法
   anchor: RendererElement | null; // Fragment 专有
 }
 

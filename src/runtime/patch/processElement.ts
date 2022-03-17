@@ -1,4 +1,4 @@
-import { RendererElement, ShapeFlags, VNode, VNodeArrayChildren } from "../interface";
+import { RendererElement, ShapeFlags, VNode, VNodeChildAtom } from "../interface";
 import { mountChildren, patchChildren } from "./processChildren";
 
 export const processElement = (oldVNode: VNode | null, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
@@ -17,7 +17,7 @@ const mountElement = (newVNode: VNode, container: RendererElement, anchor: Rende
   if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {    
     element.textContent = children as string;
   } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-    mountChildren(children as VNodeArrayChildren, element, anchor);
+    mountChildren(children as VNodeChildAtom[], element, anchor);
   }
 
   newVNode.el = element;

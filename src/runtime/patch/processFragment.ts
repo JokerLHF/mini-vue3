@@ -1,5 +1,5 @@
-import { RendererElement, ShapeFlags, VNode, VNodeArrayChildren } from "../interface";
-import { mountChildren, patchArrayChildren } from "./processChildren";
+import { RendererElement, ShapeFlags, VNode, VNodeChildAtom } from "../interface";
+import { mountChildren, patchKeyedChildren } from "./processChildren";
 
 export const processFragment = (oldVNode: VNode | null, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
   // 用来删除 unMountFragment
@@ -29,12 +29,12 @@ export const processFragment = (oldVNode: VNode | null, newVNode: VNode, contain
 const mountFragment = (newVNode: VNode, container: RendererElement, anchor: RendererElement) => {
   const { shapeFlag, children } = newVNode;
   if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-    mountChildren(children as VNodeArrayChildren, container, anchor);
+    mountChildren(children as VNodeChildAtom[], container, anchor);
   }
 }
 
 const patchFragment = (oldVNode: VNode, newVNode: VNode, container: RendererElement, anchor: RendererElement) => {
-  patchArrayChildren(oldVNode, newVNode, container, anchor);
+  patchKeyedChildren(oldVNode.children as VNode[], newVNode.children, container, anchor);
 }
 
 

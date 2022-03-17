@@ -1,6 +1,6 @@
 import { VNode } from "./interface";
 
 export const isSameVNode = (oldVNode: VNode, newVNode: VNode) => {
-  return oldVNode.type === newVNode.type;
+  return oldVNode.type === newVNode.type && oldVNode.key === newVNode.key;
 }
   
