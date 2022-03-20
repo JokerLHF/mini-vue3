@@ -6,6 +6,8 @@
 // refRun()
 // computedRun();
 
+import { reactive } from './reactivity/reactive';
+import { ref } from './reactivity/ref';
 import { h, Text, render, Fragment } from './runtime';
 // props 的
 // render(
@@ -93,26 +95,124 @@ import { h, Text, render, Fragment } from './runtime';
 // }, 3000);
 
 // Diff 情况3
-render(
-  h('ul', {}, [
-    h('li', { key: 'first' }, 'first'),
-    h('li', { key: 'second' }, 'second'),
-    h('li', { key: 'third' }, 'third'),
-    h('li', { key: 'four' }, 'four'),
-    h('li', { key: 'six' }, 'six'),
-  ]),
-  document.body,
-);
+// render(
+//   h('ul', {}, [
+//     h('li', { key: 'first' }, 'first'),
+//     h('li', { key: 'second' }, 'second'),
+//     h('li', { key: 'third' }, 'third'),
+//     h('li', { key: 'four' }, 'four'),
+//     h('li', { key: 'six' }, 'six'),
+//   ]),
+//   document.body,
+// );
 
-setTimeout(() => {
-  render(
-    h('ul', {}, [
-      h('li', { key: 'four' }, 'four'),
-      h('li', { key: 'first' }, 'first'),
-      h('li', { key: 'second' }, 'second'),
-      h('li', { key: 'third' }, 'third'),
-      h('li', { key: 'five' }, 'five'),
-    ]),
-    document.body,
-  );
-}, 3000);
+// setTimeout(() => {
+//   render(
+//     h('ul', {}, [
+//       h('li', { key: 'four' }, 'four'),
+//       h('li', { key: 'first' }, 'first'),
+//       h('li', { key: 'second' }, 'second'),
+//       h('li', { key: 'third' }, 'third'),
+//       h('li', { key: 'five' }, 'five'),
+//     ]),
+//     document.body,
+//   );
+// }, 3000);
+
+
+// component 主动更新
+// const com = {
+//   setup() {
+//     const count = ref(0);
+//     const add = () => count.value++;
+//     return {
+//       count,
+//       add,
+//     };
+//   },
+//   render(ctx: any) {
+//     return [
+//       h('div', {}, ctx.count.value),
+//       h(
+//         'button',
+//         {
+//           onClick: ctx.add,
+//         },
+//         'add'
+//       ),
+//     ];
+//   },
+// }
+
+// render(h(com, {}, null), document.body);
+
+// component 被动更新
+// const Child = {
+//   props: ['foo'],
+//   render(ctx: any) {
+//     return [h('div', { class: 'a', id: ctx.bar }, ctx.foo)];
+//   },
+// };
+
+// const Parent = {
+//   setup() {
+//     const vnodeProps = reactive({
+//       foo: 'foo',
+//       bar: 'bar',
+//     });
+//     const changeProps = () => {
+//       vnodeProps.foo = `changeBar+${Math.random()}`
+//     };
+//     return { vnodeProps, changeProps };
+//   },
+//   render(ctx: any) {
+//     return [
+//       h(Child, ctx.vnodeProps, null),
+//       h(
+//         'button',
+//         { onClick: ctx.changeProps },
+//         'changeProps'
+//       ),
+//     ];
+//   },
+// };
+
+// render(h(Parent, {}, null), document.body);
+
+
+// component 被动更新 props 没有变化
+const Child = {
+  props: ['foo'],
+  render(ctx: any) {
+    return [h('div', { class: 'a' }, ctx.foo)];
+  },
+};
+
+const Parent = {
+  setup() {
+    const vnodeProps = reactive({
+      foo: 'foo',
+    });
+    const count = ref(0);
+    const add = () => count.value++;
+    return {
+      count,
+      add,
+      vnodeProps
+    };
+
+  },
+  render(ctx: any) {
+    return [
+      h(Child, ctx.vnodeProps, null),
+      h('div', {}, ctx.count.value),
+      h(
+        'button',
+        { onClick: ctx.add },
+        'add'
+      ),
+    ];
+  },
+};
+
+render(h(Parent, {}, null), document.body);

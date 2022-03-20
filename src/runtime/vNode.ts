@@ -1,5 +1,5 @@
-import { isBoolean, isNull, isNumber, isString, isUndefined } from "../utils";
-import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren, VNodeChildAtom } from "./interface";
+import { isArray, isBoolean, isNull, isNumber, isString, isUndefined } from "../utils";
+import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren, VNodeChildAtom, Component } from "./interface";
 
 /**
  *  h(Symbol(Text), {}, 111)
@@ -11,7 +11,7 @@ import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren,
  export function h(
   type: typeof Text,
   props: VNodeProps,
-  children: RawChildren
+  children: RawChildren,
 ): VNode
 
 /**
@@ -25,7 +25,7 @@ import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren,
 export function h(
   type: string,
   props: VNodeProps,
-  children: VNodeChildAtom[] | RawChildren
+  children: VNodeChildAtom[] | RawChildren,
 ): VNode
 
 /**
@@ -34,11 +34,24 @@ export function h(
  export function h(
   type: typeof Fragment,
   props: VNodeProps,
-  children: VNodeChildAtom[]
+  children: VNodeChildAtom[],
 ): VNode
 
+/**
+ *  h(Component, {}, 'foo')
+ *  h(Component, {}, 111) 
+ *  h(Component, {}, true)
+ *  h(Component, {}, undefined)
+ *  h(Component, {}, null)
+ *  h(Component, {}, [111, 'foo', true, undefined, null, h('br')])
+ */
+export function h(
+  type: Component,
+  props: VNodeProps,
+  children: VNodeChildAtom[] | RawChildren,
+): VNode
 
-export function h(type: any, props: any, children: any): VNode {  
+export function h(type: any, props: any, children: any): VNode {
   return createVNode(type, props, children);
 } 
 
@@ -49,6 +62,7 @@ const createVNode = (type: any, props: any, children: any): VNode => {
     children,
     el: null,
     anchor: null,
+    component: null,
     key: props.key,
     shapeFlag: getShapeFlags(type),
   }
@@ -81,11 +95,55 @@ const getShapeFlags = (type: VNodeTypes) => {
   return shapeFlag;
 }
 
-// TODO: 先这样
-export const normalizeVNode = (child: VNodeChildAtom): VNode => {
+export const normalizeVNode = (child: VNodeChildAtom | VNodeChildAtom[]): VNode => {
+  // 数组类型用 fragment
+  if (isArray(child)) {
+    return createVNode(Fragment, {}, child);
+  }
   // 根据 children 的类型处理 shapeFlag
   if (isRawChildren(child)) {
     return createVNode(Text, {}, `${child}`);
   }
   return child as VNode;
 }
+
+// h(
+//   {
+//     props: ['foo'],
+//     setup() {
+//       const count = ref(0);
+//       const add = () => count.value++;
+//       return {
+//         count,
+//         add,
+//       };
+//     },
+//     render(ctx) {
+//       return [
+//         h('div', null, ctx.count.value),
+//         h(
+//           'button',
+//           {
+//             onClick: ctx.add,
+//           },
+//           'add'
+//         ),
+//       ];
+//     },
+//   },
+// {}, '11')
+
+// const Comp = {
+//   props: ['foo'],
+//   render(ctx) {
+//     return h('div', { class: 'a', id: ctx.bar }, ctx.foo);
+//   },
+// };
+
+// const vnodeProps = {
+//   foo: 'foo',
+//   bar: 'bar',
+// };
+
+// const vnode = h(Comp, vnodeProps);
+// render(vnode, root); // 渲染为<div class="a" bar="bar">foo</div>

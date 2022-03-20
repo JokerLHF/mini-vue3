@@ -1,13 +1,24 @@
-export interface RendererElement {
+export interface JSONObject {
   [key: string]: any;
 }
+export interface RendererElement extends JSONObject {};
 
 export const Text = Symbol('Text');
 export const Fragment = Symbol('Fragment');
+
+
+// 只支持最简单的 vue3 语法
+export interface Component {
+  setup?: (props: JSONObject) => JSONObject;
+  render: (ctx: JSONObject) => RawChildren | VNodeChildAtom[];
+  props?: string[];
+}
+
 export type VNodeTypes =
   | string
   | typeof Text
   | typeof Fragment
+  | Component
 
 export type RawChildren = 
   | number
@@ -25,9 +36,20 @@ export type VNodeChildren =
   | string
   | VNodeChildAtom[];
 
-export type VNodeProps = { [key: string]: any };
+export type VNodeProps = JSONObject;
 
 export type VNodeKey = string | number | null;
+
+export interface ComponentInstance {
+  type: Component,
+  props: JSONObject,
+  setupState: JSONObject,
+  ctx: JSONObject | null,
+  isMounted: boolean;
+  subTree: VNode | null,
+  next: VNode | null, // 被动更新的 vNode
+  update: null | { (): void },
+}
 export interface VNode {
   type: VNodeTypes;
   props: VNodeProps;
@@ -36,6 +58,7 @@ export interface VNode {
   el: RendererElement | null;
   key: VNodeKey; // 用于 diff 算法
   anchor: RendererElement | null; // Fragment 专有
+  component: ComponentInstance | null, // 组件专有
 }
 
 // << 表示向左移动指定位数，左边超出的位数将会被清除，右边将会补零。

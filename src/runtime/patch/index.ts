@@ -47,6 +47,6 @@ export const unMount = (prevVNode: VNode) => {
   } else if (prevVNode.shapeFlag & ShapeFlags.FRAGMENT) {
     unMountFragment(prevVNode);
   } else if (prevVNode.shapeFlag & ShapeFlags.COMPONENT) {
-    unMountComponent()
+    unMountComponent(prevVNode);
   }
 }
