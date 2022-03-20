@@ -3,6 +3,7 @@ import { effect } from "../../reactivity/effect";
 import { Component, RendererElement, VNode, JSONObject, ComponentInstance } from "../interface";
 import { normalizeVNode } from "../vNode";
 import { shouldUpdateComponent } from "../helper";
+import { queueJob } from "../scheduler";
 
 /**
  * 组件的更新分为主动更新和被动更新
@@ -110,6 +111,8 @@ const setupRenderEffect = (instance: ComponentInstance, newVNode: VNode, contain
     ));
     patch(prev, subTree, container, anchor);
     newVNode.el = subTree.el;
+  }, {
+    scheduler: queueJob,
   });
 }
 

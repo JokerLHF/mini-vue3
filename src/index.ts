@@ -8,7 +8,7 @@
 
 import { reactive } from './reactivity/reactive';
 import { ref } from './reactivity/ref';
-import { h, Text, render, Fragment } from './runtime';
+import { h, Text, render, Fragment } from './runtime-core';
 // props 的
 // render(
 //   h('div', {}, [
@@ -181,38 +181,69 @@ import { h, Text, render, Fragment } from './runtime';
 
 
 // component 被动更新 props 没有变化
-const Child = {
-  props: ['foo'],
-  render(ctx: any) {
-    return [h('div', { class: 'a' }, ctx.foo)];
-  },
-};
+// const Child = {
+//   props: ['foo'],
+//   render(ctx: any) {
+//     return [h('div', { class: 'a' }, ctx.foo)];
+//   },
+// };
 
-const Parent = {
+// const Parent = {
+//   setup() {
+//     const vnodeProps = reactive({
+//       foo: 'foo',
+//     });
+//     const count = ref(0);
+//     const add = () => count.value++;
+//     return {
+//       count,
+//       add,
+//       vnodeProps
+//     };
+
+//   },
+//   render(ctx: any) {
+//     return [
+//       h(Child, ctx.vnodeProps, null),
+//       h('div', {}, ctx.count.value),
+//       h(
+//         'button',
+//         { onClick: ctx.add },
+//         'add'
+//       ),
+//     ];
+//   },
+// };
+
+// render(h(Parent, {}, null), document.body);
+
+
+const Comp = {
   setup() {
-    const vnodeProps = reactive({
-      foo: 'foo',
-    });
     const count = ref(0);
-    const add = () => count.value++;
+    const add = () => {
+      count.value++;
+      count.value++;
+      count.value++;
+    };
     return {
       count,
       add,
-      vnodeProps
     };
-
   },
   render(ctx: any) {
+    console.log('render');
     return [
-      h(Child, ctx.vnodeProps, null),
-      h('div', {}, ctx.count.value),
+      h('div', {}, `count: ${ctx.count.value}`),
       h(
         'button',
-        { onClick: ctx.add },
+        {
+          onClick: ctx.add,
+        },
         'add'
       ),
     ];
   },
 };
 
-render(h(Parent, {}, null), document.body);
+render(h(Comp, {}, null), document.body);

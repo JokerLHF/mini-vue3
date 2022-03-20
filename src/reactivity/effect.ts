@@ -2,18 +2,18 @@
 // 表示函数对象
 export interface EffectFn { 
   (): any;
-  scheduler?: () => void; 
+  scheduler?: (effect: EffectFn) => void; 
 }
 
 let activeEffect: EffectFn | undefined = undefined;
 const effectStack: EffectFn[] = [];
 
-interface IOptios {
+interface IOptions {
   lazy?: boolean;
-  scheduler?: () => void;
+  scheduler?: (effect: EffectFn) => void;
 }
 
-export function effect(fn: () => void, options?: IOptios) {
+export function effect(fn: () => void, options?: IOptions) {
   const effectFn = () => {
     try {
       // 处理：嵌套 effect
@@ -96,8 +96,8 @@ export const trigger = (target: any, key: string | symbol) => {
     return;
   }
   console.log('trigger', targetMap);
-  
+
   dep.forEach(fn => {
-    fn.scheduler ? fn.scheduler() : fn();
+    fn.scheduler ? fn.scheduler(fn) : fn();
   })
 }
