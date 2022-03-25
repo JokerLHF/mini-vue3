@@ -6,9 +6,12 @@
 // refRun()
 // computedRun();
 
+import { parse } from './compiler-core/parse';
 import { reactive } from './reactivity/reactive';
 import { ref } from './reactivity/ref';
 import { h, Text, render, Fragment } from './runtime-core';
+import { createApp } from './runtime-core/createApp';
+
 // props 的
 // render(
 //   h('div', {}, [
@@ -144,7 +147,7 @@ import { h, Text, render, Fragment } from './runtime-core';
 //   },
 // }
 
-// render(h(com, {}, null), document.body);
+// render(h(com), document.body);
 
 // component 被动更新
 // const Child = {
@@ -235,6 +238,8 @@ const Comp = {
     console.log('render');
     return [
       h('div', {}, `count: ${ctx.count.value}`),
+      h('div'),
+      h(Text),
       h(
         'button',
         {
@@ -246,4 +251,8 @@ const Comp = {
   },
 };
 
-render(h(Comp, {}, null), document.body);
+createApp(Comp).mount(document.body);
+
+
+const ast = parse(`<div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass"> hello {{name}} </div>`);
+console.log('ast', ast);

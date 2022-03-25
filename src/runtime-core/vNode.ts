@@ -7,11 +7,13 @@ import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren,
  *  h(Symbol(Text), {}, true)
  *  h(Symbol(Text), {}, undefined)
  *  h(Symbol(Text), {}, null)
+ *
+ *  h(Symbol(Text))
  */
  export function h(
   type: typeof Text,
-  props: VNodeProps,
-  children: RawChildren,
+  props?: VNodeProps,
+  children?: RawChildren,
 ): VNode
 
 /**
@@ -21,11 +23,13 @@ import { VNode, VNodeTypes, ShapeFlags, VNodeProps, Text, Fragment, RawChildren,
  *  h('div', {}, undefined)
  *  h('div', {}, null)
  *  h('div', {}, [111, 'foo', true, undefined, null, h('br')])
+ * 
+ *  h('div')
  */
 export function h(
   type: string,
-  props: VNodeProps,
-  children: VNodeChildAtom[] | RawChildren,
+  props?: VNodeProps,
+  children?: VNodeChildAtom[] | RawChildren,
 ): VNode
 
 /**
@@ -44,14 +48,16 @@ export function h(
  *  h(Component, {}, undefined)
  *  h(Component, {}, null)
  *  h(Component, {}, [111, 'foo', true, undefined, null, h('br')])
+ * 
+ *  h(Component)
  */
 export function h(
   type: Component,
-  props: VNodeProps,
-  children: VNodeChildAtom[] | RawChildren,
+  props?: VNodeProps,
+  children?: VNodeChildAtom[] | RawChildren,
 ): VNode
 
-export function h(type: any, props: any, children: any): VNode {
+export function h(type: any, props: any = {}, children: any = null): VNode {
   return createVNode(type, props, children);
 } 
 
