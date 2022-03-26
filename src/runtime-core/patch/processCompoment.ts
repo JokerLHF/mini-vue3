@@ -1,9 +1,10 @@
 import { patch, unMount } from "./index";
 import { effect } from "../../reactivity/effect";
-import { Component, RendererElement, VNode, JSONObject, ComponentInstance } from "../interface";
+import { Component, RendererElement, VNode, JSONObject, ComponentInstance, RenderFunction } from "../interface";
 import { normalizeVNode } from "../vNode";
 import { shouldUpdateComponent } from "../helper";
 import { queueJob } from "../scheduler";
+import { compiler } from "../../compiler-core";
 
 /**
  * 组件的更新分为主动更新和被动更新
@@ -83,12 +84,18 @@ const setupComponent = (instance: ComponentInstance, newVNode: VNode) => {
 }
 
 const setupRenderEffect = (instance: ComponentInstance, newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {
+  const componentType = instance.type;
+  // TODO：这里可以看一下 ts 如何实现 interface 属性的互斥效果
+  if (componentType.template && !componentType.render) {
+    // compiler 返回的是字符串，需要将字符串解析成一段JS脚本并执行。所以使用 newFunction
+    const code = compiler(componentType.template);
+    componentType.render = new Function('ctx', code) as RenderFunction;
+  }
   instance.update = effect(() => {  
-    const componentType = instance.type;
     // mount
     if (instance.isMounted) {
       const subTree = instance.subTree = normalizeVNode(
-        componentType.render(instance.ctx!)
+        componentType.render?.(instance.ctx!)
       );
   
       patch(null, subTree, container, anchor);
@@ -107,7 +114,7 @@ const setupRenderEffect = (instance: ComponentInstance, newVNode: VNode, contain
   
     const prev = instance.subTree;
     const subTree = (instance.subTree = normalizeVNode(
-      componentType.render(instance.ctx!)
+      componentType.render?.(instance.ctx!)
     ));
     patch(prev, subTree, container, anchor);
     newVNode.el = subTree.el;

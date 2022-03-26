@@ -8,10 +8,12 @@ export const Fragment = Symbol('Fragment');
 
 
 // 只支持最简单的 vue3 语法
+export type RenderFunction = (ctx: JSONObject) => RawChildren | VNodeChildAtom[];
 export interface Component {
   setup?: (props: JSONObject) => JSONObject;
-  render: (ctx: JSONObject) => RawChildren | VNodeChildAtom[];
+  render?: RenderFunction;
   props?: string[];
+  template?: string;
 }
 
 export type VNodeTypes =

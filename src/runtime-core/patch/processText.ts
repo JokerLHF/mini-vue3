@@ -19,7 +19,7 @@ export const processText = (oldVNode: VNode | null, newVNode: VNode, container: 
 
 const patchText = (oldVNode: VNode, newVNode: VNode) => {
   newVNode.el = oldVNode.el!;
-  newVNode.el.textContent = oldVNode.children;
+  newVNode.el.textContent = newVNode.children;
 }
 
 const mountText = (newVNode: VNode, container: RendererElement, anchor: RendererElement | null) => {

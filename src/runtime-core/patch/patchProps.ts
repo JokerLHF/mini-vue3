@@ -1,4 +1,4 @@
-import { isObject, isString } from "../../utils";
+import { isNumber, isObject, isString } from "../../utils";
 import { RendererElement, VNodeProps } from "../interface";
 
 /**
@@ -38,12 +38,12 @@ const patchDomProp = (el: RendererElement, key: string, prevPropVal: any, nextPr
 }
 
 /**
- * 暂时只支持 class 是字符串的情况
+ * 暂时只支持 class 是字符串以及 数字 的情况
  * h('div', { class: 'aaa' }, []);
  */
 const handlePatchClass = (el: RendererElement, prevPropVal: any, nextPropVal: any) => {
-  if (isString(nextPropVal)) {
-    el.className = nextPropVal;
+  if (isString(nextPropVal) || isNumber(nextPropVal)) {
+    el.className = `${nextPropVal}`;
   }
 }
 

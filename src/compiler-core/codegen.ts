@@ -19,18 +19,18 @@ export const traverseNode = (node: ASTNode) => {
 
 const createTextVNode = (node: TextAST | ExpressAST) => {
   const child = createText(node);
-  return `h(Text, null, ${child})`;
+  return `h(Text, {}, ${child})`;
 }
 
 const resolveElementASTNode = (node: ElementAST) => {
   const tag = JSON.stringify(node.tag);
 
   const propsAttr = createPropAttr(node);
-  const props = propsAttr.length ? `{ ${propsAttr.join(', ')} }` : 'null';
+  const props = propsAttr.length ? `{ ${propsAttr.join(', ')} }` : '{}';
 
-  const childStr = node.children.length ? traverseChildren(node.children) : 'null';
-
-  return `h(${tag}, ${props}, ${childStr})`;
+  const childStr = node.children.length ? traverseChildren(node.children) : '';
+  const children = childStr ? `[${childStr}]` : 'null';
+  return `h(${tag}, ${props}, ${children})`;
 }
 
 /**
@@ -71,7 +71,7 @@ const resolveElementASTNode = (node: ElementAST) => {
 const createPropAttr = (node: ElementAST) => {
   const { props = [], directives = [] } = node;
   const propsStr = props.map(item => {
-    return `${item.name}: ${item.value}`
+    return `${item.name}: ${createText(item.value)}`
   });
 
   const DirectivesStr = directives.map(dir => {
@@ -99,7 +99,7 @@ const traverseChildren = (children: ASTChild[]) => {
     // 在 traverseChildren 之后肯定不会出现 rootNode
     result.push(traverseNode(children[i]) as string);
   }
-  return result.length ? `[${result.join(', ')}]` : '';
+  return result.length ? result.join(', ') : '';
 }
 
 // static 使用 JSON.stringify 加上引号

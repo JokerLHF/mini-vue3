@@ -10,7 +10,7 @@ module.exports = {
   target: 'web',
 
   entry: {
-    main: path.resolve(__dirname, './src/index.ts'),
+    main: path.resolve(__dirname, './src/example/index.ts'),
   },
 
   devServer: {
