@@ -29,3 +29,7 @@ export const isArray = (value: any) => {
 export const isSymbol = (value: any) => {
   return Object.prototype.toString.call(value) === '[object Symbol]';
 }
+
+export const capitalize = (str: string) => {
+  return str[0].toUpperCase() + str.slice(1);
+}

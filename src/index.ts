@@ -6,6 +6,7 @@
 // refRun()
 // computedRun();
 
+import { compiler } from './compiler-core';
 import { parse } from './compiler-core/parse';
 import { reactive } from './reactivity/reactive';
 import { ref } from './reactivity/ref';
@@ -254,5 +255,12 @@ const Comp = {
 createApp(Comp).mount(document.body);
 
 
-const ast = parse(`<div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass"> hello {{name}} </div>`);
-console.log('ast', ast);
+// const res = compiler(`<div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass"> hello {{name}} </div>`);
+// console.log('res', res);
+
+const res1 = compiler(`<div> hello       {{name}} <span>222</span></div>`);
+console.log('res1', res1);
+
+
+// const res2 = compiler(`<div></div>`);
+// console.log('res2', res2);

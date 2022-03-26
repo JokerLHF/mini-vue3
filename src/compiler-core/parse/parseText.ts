@@ -6,11 +6,12 @@ import { parseTextData } from "./helper";
 /**
  * 情况1: hello </div>, 遇到 </ 就表示解析结束
  * 情况2: hello {{ name }}, 遇到 {{ 就表示解析结束
- * 情况3: hello, 只有单纯的字符串，根据长度解析完结束
+ * 情况3: hello <div />, 遇到 < 就表示解析结束
+ * 情况4: hello, 只有单纯的字符串，根据长度解析完结束
  */
 export const parseText = (context: Context): TextAST => {
   const { source, options } = context;
-  const endTokens = [options.delimiters[0], '</'];
+  const endTokens = [options.delimiters[0], '</', '<'];
 
   let endIndex = source.length;
   for (let i = 0; i < endTokens.length; i++) {

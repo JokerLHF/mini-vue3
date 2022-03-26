@@ -14,6 +14,8 @@ export enum ElementTypes {
 }
 
 export type ASTChild = ElementAST | TextAST | InterpolationAST;
+export type ASTNode = ASTChild | RootAST;
+
 
 // 根 AST
 export interface RootAST {
@@ -91,7 +93,7 @@ export interface ElementAST {
   children: ASTChild[],
 }
 
-export const createRoot = (children: ASTChild[]) => {
+export const createRoot = (children: ASTChild[]): RootAST => {
   return {
     type: NodeTypes.ROOT,
     children,
