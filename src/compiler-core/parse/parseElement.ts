@@ -97,11 +97,13 @@ const parseAttributes = (context: Context) => {
 
 
 /**
- * v-if="ok" @click="func" :class="myClass" v-bind:class="myClass" />
+ * v-if="ok" @click="func" :class="myClass" v-bind:class="myClass" id="foo" />
  *    v-if="ok"               name: "v-if",  value: "ok"
  *    @click="func"           name: "@click", value: "func"
  *    :class="myClass"        name: ":class",  value: "myClass"
  *    v-bind:class="myClass"  name: "v-bind:class",  value: "myClass"
+ *    v-else                  name: "else", 
+ *    id="foo"                name: "id",    value: "foo"
  */
 
 const parseAttribute = (context: Context): AttributeAST | DirectiveAST | null => {
@@ -124,10 +126,6 @@ const parseAttribute = (context: Context): AttributeAST | DirectiveAST | null =>
     advanceSpaces(context);
   }
 
-  if (!value) {
-    return null;
-  }
-
   // Directive
   if (/^(v-|:|@)/.test(name)) {
     let dirName, argContent;
@@ -148,17 +146,21 @@ const parseAttribute = (context: Context): AttributeAST | DirectiveAST | null =>
     return {
       type: NodeTypes.DIRECTIVE,
       name: dirName,
-      exp: {
+      exp: value ? {
         type: NodeTypes.SIMPLE_EXPRESSION,
         content: value.content,
         isStatic: false,
-      },
+      } : undefined,
       arg: argContent ? {
         type: NodeTypes.SIMPLE_EXPRESSION,
         content: argContent,
         isStatic: true,
       } : undefined,
     };
+  }
+
+  if (!value) {
+    return null;
   }
 
   // Attribute

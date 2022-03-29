@@ -53,17 +53,18 @@ export interface InterpolationAST {
 }
 
 /**
- * 指令节点: 比如 <div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass" />
+ * 指令节点: 比如 <div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass" v-else />
  *    v-if="ok"               name: "if",  exp: "ok"
  *    @click="func"           name: "on",  arg: "click", exp: "func"
  *    :class="myClass"        name: "bind",  arg: "class", exp: "myClass"
  *    v-bind:class="myClass"  name: "bind",  arg: "class", exp: "myClass"
+ *    v-else                  name: "else"
  */
 export interface DirectiveAST {
   type: NodeTypes.DIRECTIVE,
   name: string,
   arg?: ExpressAST,
-  exp: ExpressAST,
+  exp?: ExpressAST,
 }
 
 /**

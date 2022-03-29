@@ -78,6 +78,7 @@ const removeWhiteSpace = (nodes: ASTChild[]) => {
           *   <span>b</span>
           *   <span>c</span>
           * </div>
+          * 直接去掉换行和空格, 也就是压缩成一行
          */
         if (
           !prev ||
@@ -93,6 +94,7 @@ const removeWhiteSpace = (nodes: ASTChild[]) => {
           /**
            * <div>
            *  <span>a</span>          <span>b</span>
+           *  多个空格变为一个空格
            */
           node.content = ' ';
         }

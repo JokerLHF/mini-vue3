@@ -1,11 +1,11 @@
-import { traverseNode } from "./codegen";
+import { traverseNode } from "./codegen/index";
 import { parse } from "./parse";
 
 export const compiler = (content: string) => {
   const ast = parse(content);
   console.log('ast', ast);
   
-  const nodeStr = traverseNode(ast);
+  const nodeStr = traverseNode(ast, null);
   console.log('nodeStr', nodeStr);
   
   // with 作用是在模版中使用 count.value 可以直接变为拿到 ctx.count.value

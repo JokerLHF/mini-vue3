@@ -229,10 +229,18 @@ const Comp = {
       count,
       add,
       items: [1, 2, 3],
+      ok: false,
+      ok2: false,
+      ok3: true,
     };
   },
   template: `
-    <div id="foo" :class="count.value" @click="add" v-for="(item, index) in items"> hello    {{item}} - {{index}}  {{count.value}} <span>222</span></div>
+    <div v-for="(item,index) in items">{{item}}</div>
+    <h1 v-if="ok">h1</h1>
+    <h2 v-else-if="ok2">h2</h2>
+    <h3 v-else-if="ok3">h3</h3>
+    <h4 v-else>h4</h4>
+    <div>11</div>
   `,
   // render(ctx: any) {
   //   console.log('render');
