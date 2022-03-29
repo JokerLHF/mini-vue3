@@ -18,7 +18,9 @@ const mountElement = (newVNode: VNode, container: RendererElement, anchor: Rende
   if (shapeFlag & ShapeFlags.TEXT_CHILDREN) {    
     element.textContent = children as string;
   } else if (shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-    mountChildren(children as VNodeChildAtom[], element, anchor);
+    // 这里不能传anchor。因为anchor限制的是当前的element
+    // 作为本element的children，不用指定anchor，append就行
+    mountChildren(children as VNodeChildAtom[], element, null);
   }
 
   if (props) {

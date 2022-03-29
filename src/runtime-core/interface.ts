@@ -3,12 +3,16 @@ export interface JSONObject {
 }
 export interface RendererElement extends JSONObject {};
 
-export const Text = Symbol('Text');
-export const Fragment = Symbol('Fragment');
+// TODO: symbol 作为对象的值导出会出现类型丢失情况：https://github.com/microsoft/TypeScript/issues/35562
+// export const Text = Symbol('Text');
+// export const Fragment = Symbol('Fragment');
 
+export const Text = 'Mini_Vue_Text';
+export const Fragment = 'Mini_Vue_Fragment';
 
 // 只支持最简单的 vue3 语法
-export type RenderFunction = (ctx: JSONObject) => RawChildren | VNodeChildAtom[];
+export type RenderFunction = (ctx: JSONObject) => VNodeChildAtom | VNodeChildAtom[];
+
 export interface Component {
   setup?: (props: JSONObject) => JSONObject;
   render?: RenderFunction;

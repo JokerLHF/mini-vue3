@@ -1,5 +1,5 @@
 import { capitalize } from "../utils";
-import { ASTChild, ASTNode, ElementAST, ExpressAST, NodeTypes, TextAST } from "./ast";
+import { ASTChild, ASTNode, DirectiveAST, ElementAST, ExpressAST, NodeTypes, TextAST } from "./ast";
 
 /**
  * 将 astNode 变为 h 函数
@@ -23,6 +23,11 @@ const createTextVNode = (node: TextAST | ExpressAST) => {
 }
 
 const resolveElementASTNode = (node: ElementAST) => {
+  const directives = handleSpecialDirectives(node);
+  return directives || createElementASTNode(node);
+}
+
+const createElementASTNode = (node: ElementAST) => {
   const tag = JSON.stringify(node.tag);
 
   const propsAttr = createPropAttr(node);
@@ -83,7 +88,7 @@ const createPropAttr = (node: ElementAST) => {
         const eventName = `on${capitalize(content!)}`;
         let exp = dir.exp.content;
         return `${eventName}: ${exp}`;
-      default: // v-if
+      default: // 暂时没有什么作用
         return `${dir.name}: ${createText(dir.exp)}`;
     }
   });
@@ -105,4 +110,35 @@ const traverseChildren = (children: ASTChild[]) => {
 // static 使用 JSON.stringify 加上引号
 const createText = ({ content = '', isStatic = true } = {}) => {
   return isStatic ? JSON.stringify(content) : content;
+}
+
+/**
+ * v-if v-else v-else-if
+ * v-for
+ * v-model 特殊处理
+ */
+// 模版字符串 astNode: <div v-for="(item,index) in items">{{item, index}}</div>
+// (item, index) => return <div>{{item, index}}</div>
+// (item, index) => return <div>{{item, index}}</div>
+
+const handleSpecialDirectives = (node: ElementAST) => {
+  // 1. 需要将 v-for 的 ast node 去掉
+  const forNode = node.directives && pluck(node.directives, 'for', true);
+  // 2. 使用 fragment 包裹, 手动for 循环 items
+  if (forNode) {
+    const [args, source] = forNode.exp.content.split(/\sin\s/); // in前后都有空格
+    return `h(Fragment, {}, renderList(
+      ${source.trim()},
+      ${args.trim()} => ${createElementASTNode(node)}
+    ))`;
+  }
+}
+
+const pluck = (directives: DirectiveAST[], name: string, remove = false) => {
+  const index = directives.findIndex((dir) => dir.name === name);
+  const dir = directives[index];
+  if (remove && index > -1) {
+    directives.splice(index, 1);
+  }
+  return dir;
 }

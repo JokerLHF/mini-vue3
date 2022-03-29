@@ -35,7 +35,7 @@ export function h(
 /**
  *  h(Symbol(Fragment), {}, [111, 'foo', true, undefined, null, h('br')])
  */
- export function h(
+export function h(
   type: typeof Fragment,
   props: VNodeProps,
   children: VNodeChildAtom[],

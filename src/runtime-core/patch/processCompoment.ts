@@ -97,7 +97,7 @@ const setupRenderEffect = (instance: ComponentInstance, newVNode: VNode, contain
       const subTree = instance.subTree = normalizeVNode(
         componentType.render?.(instance.ctx!)
       );
-  
+
       patch(null, subTree, container, anchor);
       newVNode.el = subTree.el;
       instance.isMounted = false;

@@ -1,3 +1,4 @@
+import { isArray, isNumber, isObject, isString } from "../utils";
 import { JSONObject, VNode } from "./interface";
 
 export const isSameVNode = (oldVNode: VNode, newVNode: VNode) => {
@@ -30,4 +31,53 @@ function hasPropsChanged(prevProps: JSONObject, nextProps: JSONObject): boolean 
     }
   }
   return false;
+}
+
+
+// v-for string
+export function renderList(
+  source: string,
+  renderItem: (value: string, index: number) => VNode
+): VNode[]
+
+// v-for number
+export function renderList(
+  source: number,
+  renderItem: (value: number, index: number) => VNode
+): VNode[]
+
+// v-for array
+export function renderList<T = any>(
+  source: T[],
+  renderItem: (value: T, index: number) => VNode
+): VNode[]
+
+// v-for object
+export function renderList<T = JSONObject>(
+  source: T,
+  renderItem: <K extends keyof T>(
+    value: T[K],
+    key: K,
+    index: number
+  ) => VNode
+): VNode[]
+
+
+export function renderList(sources: any, renderItem: any) {
+  const vNodes: VNode[] = [];
+  if (isString(sources) || isArray(sources)) {
+    for (let i = 0; i < sources.length; i++) {
+      vNodes.push(renderItem(sources[i], i));
+    }
+  } else if (isNumber(sources)) {
+    for (let i = 0; i < sources; i++) {
+      vNodes.push(renderItem(i + 1, i)); // 从1开始
+    }
+  } else if (isObject(sources)) {
+    const keys = Object.keys(sources);
+    keys.forEach((key, index) => {
+      vNodes.push(renderItem(sources[key], key, index));
+    });
+  }
+  return vNodes;
 }
