@@ -1,14 +1,5 @@
-// import { computedRun } from "./reactivity/__test__/computed";
-// import { reactiveRun } from "./reactivity/__test__/reactive";
-// import { refRun } from "./reactivity/__test__/ref";
-
 import { MiniVue } from "../index";
-
-const { ref, createApp } = MiniVue;
-
-// reactiveRun();
-// refRun()
-// computedRun();
+const { ref, createApp, h } = MiniVue;
 
 // props 的
 // render(
@@ -218,6 +209,12 @@ const { ref, createApp } = MiniVue;
 
 // render(h(Parent, {}, null), document.body);
 
+const Child = {
+  props: ['count'],
+  render(ctx: any) {
+    return h('div', { class: 'a' }, ctx.count.value);
+  },
+};
 
 const Comp = {
   setup() {
@@ -234,6 +231,9 @@ const Comp = {
       ok3: true,
     };
   },
+  components: {
+    Child,
+  },
   template: `
     <div v-for="(item,index) in items">{{item}}</div>
     <h1 v-if="ok">h1</h1>
@@ -241,6 +241,7 @@ const Comp = {
     <h3 v-else-if="ok3">h3</h3>
     <h4 v-else>h4</h4>
     <div>11</div>
+    <Child :count="count" />
   `,
   // render(ctx: any) {
   //   console.log('render');
@@ -260,14 +261,3 @@ const Comp = {
 };
 
 createApp(Comp).mount(document.body);
-
-
-// const res = compiler(`<div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass"> hello {{name}} </div>`);
-// console.log('res', res);
-
-// const res1 = compiler(`<div> hello       {{name}} <span>222</span></div>`);
-// console.log('res1', res1);
-
-
-// const res2 = compiler(`<div></div>`);
-// console.log('res2', res2);

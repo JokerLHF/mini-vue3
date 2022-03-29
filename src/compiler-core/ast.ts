@@ -53,12 +53,13 @@ export interface InterpolationAST {
 }
 
 /**
- * 指令节点: 比如 <div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass" v-else />
+ * 指令节点: 比如 <div v-if="ok" @click="func" :class="myClass" v-bind:class="myClass" v-else :count="myCount" />
  *    v-if="ok"               name: "if",  exp: "ok"
  *    @click="func"           name: "on",  arg: "click", exp: "func"
  *    :class="myClass"        name: "bind",  arg: "class", exp: "myClass"
  *    v-bind:class="myClass"  name: "bind",  arg: "class", exp: "myClass"
  *    v-else                  name: "else"
+ *    :count="myCount"        name: "bind",  arg: "count", exp: "myCount"
  */
 export interface DirectiveAST {
   type: NodeTypes.DIRECTIVE,
@@ -68,7 +69,6 @@ export interface DirectiveAST {
 }
 
 /**
- * TODO：是否支持指令节点？？？？？？？
  * 属性节点: 比如 <div id="foo"> bar </div>
  *   id="foo" 就是一个属性节点, 其中 foo 表示表达式节点（静态）
  */

@@ -13,11 +13,15 @@ export const Fragment = 'Mini_Vue_Fragment';
 // 只支持最简单的 vue3 语法
 export type RenderFunction = (ctx: JSONObject) => VNodeChildAtom | VNodeChildAtom[];
 
+export interface RegisterComponent {
+  [key: string]: Component;
+}
 export interface Component {
   setup?: (props: JSONObject) => JSONObject;
   render?: RenderFunction;
   props?: string[];
   template?: string;
+  components?: RegisterComponent;
 }
 
 export type VNodeTypes =

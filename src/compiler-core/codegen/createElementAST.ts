@@ -1,6 +1,6 @@
 import { traverseChildren } from "./index";
 import { capitalize } from "../../utils";
-import { DirectiveAST, ElementAST, NodeTypes, RootAST } from "../ast";
+import { DirectiveAST, ElementAST, ElementTypes, NodeTypes, RootAST } from "../ast";
 import { createText } from "./helper";
 
 // ElementAST 的 parent 是 ElementAST 或者 RootAST
@@ -14,7 +14,6 @@ export const resolveElementASTNode = (node: ElementAST, parent: IElementAstParen
    */
   return handleVIfDirective(node, parent) ||
     handleVForDirective(node, parent) ||
-    handleVModelDirective(node, parent) ||
     createElementASTNode(node);
 }
 
@@ -92,11 +91,6 @@ const handleVIfDirective = (node: ElementAST, parent: IElementAstParent) => {
   }
 }
 
-const handleVModelDirective = (node: ElementAST, parent: IElementAstParent) => {
-
-}
-
-
 const pluck = (directives: DirectiveAST[], name: string, remove = false) => {
   const index = directives.findIndex((dir) => dir.name === name);
   const dir = directives[index];
@@ -107,7 +101,10 @@ const pluck = (directives: DirectiveAST[], name: string, remove = false) => {
 }
 
 const createElementASTNode = (node: ElementAST) => {
-  const tag = JSON.stringify(node.tag);
+  const tag =
+    node.tagType === ElementTypes.ELEMENT
+      ? `"${node.tag}"`
+      : `resolveComponent("${node.tag}")`;
 
   const propsAttr = createPropAttr(node);
   const props = propsAttr.length ? `{ ${propsAttr.join(', ')} }` : '{}';

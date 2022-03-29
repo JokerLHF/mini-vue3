@@ -3,4 +3,5 @@ export * from './render';
 export * from './vNode';
 export * from './createApp';
 export * from './scheduler';
+export * from './helper';
 
