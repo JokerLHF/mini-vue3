@@ -4,7 +4,7 @@ import { hasChanged, isObject } from "./utils";
 const reactiveMap = new WeakMap();
 
 export function isReactive(target: any) {
-  return target.__isReactive;
+  return !!target.__isReactive;
 }
 
 export const reactive = (target: any): any => {

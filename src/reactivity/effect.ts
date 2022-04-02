@@ -15,6 +15,12 @@ interface IOptions {
 
 export function effect(fn: () => void, options?: IOptions) {
   const effectFn = () => {
+    // 避免出现死循环
+    // const p = reactive({ foo: 1 })
+    // effect(() => { p.foo++ });
+    if (effectStack.includes(effectFn)) {      
+      return;
+    }
     try {
       // 处理：嵌套 effect
       effectStack.push(effectFn);

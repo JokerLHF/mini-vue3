@@ -1,4 +1,4 @@
-import { effect, EffectFn, track, trigger } from "./effect";
+import { effect, EffectFn } from "./effect";
 import { isFunction } from "./utils";
 
 
@@ -58,5 +58,5 @@ class ComputedRefImpl {
  *  computed 默认不会执行，等到调用 computed 的 get 方法 才会去调用了 reactive || ref 的 get 方法去收集依赖
  * 2. 修改执行
  *  effect 的依赖项改变， effect 列表就会改变。
- *  但是 computed 不会每一次都执行，只会执行一次随后缓存下来，
+ *  computed 依赖改变之后不会重新执行，而是将 _dirty 设置为 true，表示依赖改变了。等到重新 get value 的时候就会重新执行
  */

@@ -1,5 +1,5 @@
 import { MiniVue } from "../index";
-const { ref, createApp, h } = MiniVue;
+const { ref, createApp, h, reactive, effect } = MiniVue;
 
 // props 的
 // render(
@@ -222,6 +222,12 @@ const Comp = {
     const add = () => {
       count.value++;
     };
+
+    const obj = reactive({ a: 1 });
+    effect(() => {
+      console.log('effect', obj.a);
+      obj.a++;
+    });
     return {
       count,
       add,
