@@ -32,7 +32,7 @@ const handleVForDirective = (node: ElementAST, parent: IElementAstParent) => {
   // 2. 使用 fragment 包裹, 手动for 循环 items
   if (forNode && forNode.exp) {
     const [args, source] = forNode.exp.content.split(/\sin\s/); // in前后都有空格
-    return `h(Fragment, {}, renderList(
+    return `h(Fragment, {}, _renderList(
       ${source.trim()},
       ${args.trim()} => ${resolveElementASTNode(node, parent)}
     ))`;
@@ -104,7 +104,7 @@ const createElementASTNode = (node: ElementAST) => {
   const tag =
     node.tagType === ElementTypes.ELEMENT
       ? `"${node.tag}"`
-      : `resolveComponent("${node.tag}")`;
+      : `_resolveComponent("${node.tag}")`;
 
   const propsAttr = createPropAttr(node);
   const props = propsAttr.length ? `{ ${propsAttr.join(', ')} }` : '{}';

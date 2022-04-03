@@ -44,5 +44,5 @@ describe("reactive", () => {
     effect(() => { console.log(obj.a.b); });
     expect(isReactive(notObserve)).toBe(false);
     expect(isReactive(obj.a.b)).toBe(false);
-  })
+  });
 });

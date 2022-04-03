@@ -1,6 +1,5 @@
-import { createApp, render, h, Text, Fragment, nextTick, resolveComponent, renderList } from './runtime-core'
+import { createApp, render, h, Text, Fragment, nextTick, resolveComponent, renderList, createVNode } from './runtime-core'
 import { reactive, ref, computed, effect } from './reactivity'
-import { compiler } from './compiler-core'; 
 
 export const MiniVue = ((window as any).MiniVue = {
   createApp,
@@ -13,7 +12,7 @@ export const MiniVue = ((window as any).MiniVue = {
   ref,
   computed,
   effect,
-  compiler,
-  renderList,
-  resolveComponent,
+  _resolveComponent: resolveComponent,
+  _createVNode: createVNode,
+  _renderList: renderList,
 });

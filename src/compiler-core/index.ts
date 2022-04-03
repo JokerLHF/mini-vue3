@@ -13,7 +13,7 @@ export const compiler = (content: string) => {
   //      比如 <div v-for="(item,index) in items">{{ item }}</div>, {{ item }} 就不能替换成 ctx.item
   const code = `
   with (ctx) {
-    const { h, Text, Fragment, renderList, resolveComponent } = MiniVue;
+    const { h, Text, Fragment, _renderList, _resolveComponent } = MiniVue;
     return ${nodeStr}
   }`
   return code;

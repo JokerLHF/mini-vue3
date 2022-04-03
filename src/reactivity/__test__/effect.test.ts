@@ -1,5 +1,5 @@
 import { effect } from "../effect";
-import { isReactive, reactive } from "../reactive";
+import { reactive } from "../reactive";
 
 describe('effect 的单元测试', () => {
   it("1. effect 默认执行一次", () => {
@@ -94,5 +94,13 @@ describe('effect 的单元测试', () => {
     expect(dummy).toEqual({ num1: 1, num2: 11, num3: 101 });
     expect(parentSpy).toHaveBeenCalledTimes(3);
     expect(childSpy).toHaveBeenCalledTimes(5);
+  });
+
+  it('7. 避免 effect 隐式死循环', () => {
+    const obj = reactive({ num: 0, });
+    const spy = jest.fn(() => obj.num++);
+    effect(spy);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(obj.num).toBe(1);
   });
 });

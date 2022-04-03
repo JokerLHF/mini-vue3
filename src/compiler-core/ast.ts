@@ -33,9 +33,9 @@ export interface TextAST {
 }
 
 /**
- * 表达式节点：比如 <div v-if="ok"> bar </div> 中
+ * 表达式节点：比如 <div v-if="ok" id="foo" /> 中
  *    ok  就是一个动态表达式，指向的是一个变量
- *    bar 就是一个静态表达式，单纯表示一个字符串
+ *    foo 就是一个静态表达式，单纯表示一个字符串
  */
 export interface ExpressAST {
   type: NodeTypes.SIMPLE_EXPRESSION,
@@ -47,7 +47,7 @@ export interface ExpressAST {
  * 插槽节点：比如 <div> {{ name }} </div> 中
  *    {{ name }} 就表示一个插槽，其中 name 就是一个表达式节点(动态)
  */
-export interface InterpolationAST {
+export interface InterpolationAST { // 音标 [ɪn,tɜːpəʊ'leɪʃən] 
   type: NodeTypes.INTERPOLATION,
   content: ExpressAST,
 }
